@@ -24,9 +24,9 @@ const server = http.createServer((req, res) => {
   if (req.url === "/sobre") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     res.end(`
-      <h1>Sobre mim</h1>
-      <p>Nome: O teu nome</p>
-      <p>Turma: A tua turma</p>
+    "<h1>Sobre mim</h1>"
+    "<p>Nome: Martim Peixe</p>"
+    "<p>Turma: TGPSI24-T</p>"
     `);
     return;
   }

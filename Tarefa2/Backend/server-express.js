@@ -21,8 +21,8 @@ app.get("/", (req, res) => {
 app.get("/sobre", (req, res) => {
   res.send(
     "<h1>Sobre mim</h1>" +
-    "<p>Nome: O teu nome</p>" +
-    "<p>Turma: A tua turma</p>"
+    "<p>Nome: Martim Peixe</p>" +
+    "<p>Turma: TGPSI24-T</p>"
   );
 });
 
