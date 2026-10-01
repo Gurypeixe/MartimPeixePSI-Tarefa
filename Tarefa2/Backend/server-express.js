@@ -37,6 +37,18 @@ app.get("/cartas", (req, res) => {
   );
 });
 
+app.get('/cartas/aleatoria', (req, res) => {
+  const card = cards[Math.floor(Math.random() * cards.length)];
+
+  res.send(`
+    <h1>${card.nome}</h1>
+    <p>Tipo: ${card.tipo}</p>
+    <p>Ataque: ${card.ataque}</p>
+    <p>Defesa: ${card.defesa}</p>
+  `);
+});
+
+
 app.get("/agora", (req, res) => {
   res.send(`<h1>${new Date().toLocaleString("pt-PT")}</h1>`);
 });

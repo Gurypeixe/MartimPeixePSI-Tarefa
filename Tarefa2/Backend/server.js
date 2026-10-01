@@ -32,14 +32,26 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.url === "/cartas") {
+    const card = cards[Math.floor(Math.random() * cards.length)];
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(`
+      <h1>Cartas</h1>
+      <ul>${lista}</ul>
+    `);
+    return;
+  }
+
+    if (req.url === "/cartas/aleatoria") {
     const lista = cards.map(card =>
       `<li>${card.name} - ${card.type} - ${card.attack}/${card.defense}</li>`
     ).join("");
 
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     res.end(`
-      <h1>Cartas</h1>
-      <ul>${lista}</ul>
+      <h1>${card.nome}</h1>
+      <p>Tipo: ${card.tipo}</p>
+      <p>Ataque: ${card.ataque}</p>
+      <p>Defesa: ${card.defesa}</p>
     `);
     return;
   }
