@@ -1,18 +1,22 @@
-import { useState } from 'react'
-import './App.css'
-
-const cards = [
-  { name: "Dragão", type: "Criatura", attack: 7, defense: 5 },
-  { name: "Mago", type: "Mago", attack: 4, defense: 6 },
-  { name: "Cavaleiro", type: "Guerreiro", attack: 8, defense: 4 },
-  { name: "Fénix", type: "Criatura", attack: 9, defense: 3 },
-  { name: "Guardião", type: "Criatura", attack: 5, defense: 8 }
-];
+import Card from './Components/Card';
+import { cards } from './data/cards';
 
 export default function App() {
   return (
-    <div>
+    <main>
       <h1>A minha coleção</h1>
-    </div>
+      <p>Tenho {cards.length} cartas</p>
+
+      <ul>
+        {cards.map((card) => (
+          <Card 
+            key={card.id} 
+            name={card.name} 
+            attack={card.attack}
+            type={card.type}
+          />
+        ))}
+      </ul>
+    </main>
   );
 }
