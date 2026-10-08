@@ -5,8 +5,10 @@ export default function Card({ name, attack, type }) {
 
   return (
     <li className="card">
-      <b>{name}</b> ({type}) – ataque {attack}
-      {attack >= 6 && <span> forte</span>}
+      <b>{name}</b> ({type}) – ataque {attack} 
+      
+      {attack >= 6 && <span className="badge"> forte</span>}
+
       <button onClick={() => setLikes(likes + 1)}>
         ♥ {likes}
       </button>

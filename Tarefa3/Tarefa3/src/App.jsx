@@ -12,7 +12,7 @@ export default function App() {
           <Card 
             key={card.id} 
             name={card.name} 
-            attack={card.attack}
+            attack={card.attack} 
             type={card.type}
           />
         ))}
