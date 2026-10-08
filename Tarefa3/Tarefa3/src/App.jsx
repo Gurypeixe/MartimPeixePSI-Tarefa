@@ -1,49 +1,43 @@
-import { useState } from 'react';
-import Card from './Components/Card';
-import { cards } from './Data/cards';
+import { useState } from "react";
+import Card from "./Components/Card";
+import { cards } from "./data/cards";
 
 export default function App() {
-  const [tipo, setTipo] = useState('todas');
-  const [search, setSearch] = useState('');
-  const [sorte, setSorte] = useState(null);
+  const [filter, setFilter] = useState("Todas");
+  const [search, setSearch] = useState("");
 
-  const sortearCarta = () => {
-    const random = Math.floor(Math.random() * cards.length);
-    setSorte(cards[random]);
-  };
-
-  const visiveis = cards.filter((c) => {
-    const bateTipo = tipo === 'todas' || c.type === tipo;
-    const bateNome = c.name.toLowerCase().includes(search.toLowerCase());
-    return bateTipo && bateNome;
-  });
+  const visible = cards.filter(
+    (card) =>
+      (filter === "Todas" || card.type === filter) &&
+      card.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <main>
       <h1>A minha coleção</h1>
-      <p>Tenho {cards.length} cartas ({visiveis.length} à vista)</p>
-
-      <div style={{ marginBottom: '1rem' }}>
-        <button onClick={sortearCarta}>Carta à sorte</button>
-        {sorte && <p>Carta calhada: <b>{sorte.name}</b> (Ataque: {sorte.attack})</p>}
-      </div>
+      <p>Tenho {cards.length} cartas ({visible.length} à vista)</p>
 
       <input
-        type="text"
-        placeholder="Pesquisar..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        placeholder="Pesquisar..."
       />
 
       <div>
-        <button onClick={() => setTipo('todas')}>Todas</button>
-        <button onClick={() => setTipo('Criatura')}>Só criaturas</button>
-        <button onClick={() => setTipo('Feitiço')}>Só feitiços</button>
+        <button onClick={() => setFilter("Todas")}>Todas</button>
+        <button onClick={() => setFilter("Criatura")}>Só criaturas</button>
+        <button onClick={() => setFilter("Feitiço")}>Só feitiços</button>
       </div>
 
+      {/* Renderização com .map() e key */}
       <ul>
-        {visiveis.map((card) => (
-          <Card key={card.id} name={card.name} attack={card.attack} type={card.type} />
+        {visible.map((card) => (
+          <Card
+            key={card.id}
+            name={card.name}
+            attack={card.attack}
+            type={card.type}
+          />
         ))}
       </ul>
     </main>
