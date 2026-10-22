@@ -8,13 +8,27 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [sorte, setSorte] = useState(null);
 
   useEffect(() => {
     fetch(`${APIURL}/api/cartas`)
-      .then((response) => response.json())
-      .then((data) => setCards(data))
-      .finally(() => setLoading(false));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCards(data);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const sortearCarta = () => {
@@ -33,9 +47,10 @@ export default function App() {
     <main>
       <h1>A minha coleção</h1>
 
-      {loading ? (
-        <p>A carregar...</p>
-      ) : (
+      {loading && <p>A carregar...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {!loading && !error && (
         <>
           <p>Tenho {cards.length} cartas ({visible.length} à vista)</p>
 
