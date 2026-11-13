@@ -17,16 +17,26 @@ export default function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newCard = {
-      id: Date.now(),
-      name,
-      type,
-      attack: Number(attack) || 0,
-    };
-    setCards([...cards, newCard]);
-    setName("");
-    setType("");
-    setAttack("");
+    fetch(`${APIURL}/api/cartas`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, type, attack: Number(attack) || 0 }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((savedCard) => {
+        setCards((prev) => [...prev, savedCard]);
+        setName("");
+        setType("");
+        setAttack("");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   useEffect(() => {

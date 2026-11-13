@@ -26,6 +26,10 @@ app.get("/api/cartas", (req, res) => {
   res.json(cards);
 });
 
+app.get("/cartas", (req, res) => {
+  res.json(cards);
+});
+
 app.post("/api/cartas", (req, res) => {
   const card = req.body;
   if (!card.id) {
