@@ -61,6 +61,21 @@ app.post("/api/cartas", (req, res) => {
   res.status(201).json(card);
 });
 
+// Extra: Rota DELETE para apagar cartas por id
+app.delete("/api/cartas/:id", (req, res) => {
+  const id = Number(req.params.id);
+  cards = getCards();
+  const index = cards.findIndex((c) => c.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: "Carta não encontrada" });
+  }
+
+  cards.splice(index, 1);
+  saveCards(cards);
+  res.status(200).json({ message: "Carta apagada com sucesso", id });
+});
+
 app.use((req, res) => {
   res.status(404).send("<h1>404 - Página não encontrada</h1>");
 });

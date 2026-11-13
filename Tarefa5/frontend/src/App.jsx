@@ -15,10 +15,12 @@ export default function App() {
   const [type, setType] = useState("");
   const [attack, setAttack] = useState("");
   const [formError, setFormError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError(null);
+    setIsSubmitting(true);
 
     fetch(`${APIURL}/api/cartas`, {
       method: "POST",
@@ -40,6 +42,24 @@ export default function App() {
       })
       .catch((err) => {
         setFormError(err.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  };
+
+  const handleDelete = (id) => {
+    fetch(`${APIURL}/api/cartas/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        setCards((prev) => prev.filter((card) => card.id !== id));
+      })
+      .catch((err) => {
+        console.error("Erro ao apagar:", err);
       });
   };
 
@@ -106,7 +126,9 @@ export default function App() {
               value={attack}
               onChange={(e) => setAttack(e.target.value)}
             />
-            <button type="submit">Adicionar carta</button>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "A enviar..." : "Adicionar carta"}
+            </button>
           </form>
 
           {formError && (
@@ -139,9 +161,11 @@ export default function App() {
             {visible.map((card) => (
               <Card
                 key={card.id ?? card.name}
+                id={card.id}
                 name={card.name}
                 attack={card.attack}
                 type={card.type}
+                onDelete={handleDelete}
               />
             ))}
           </ul>
