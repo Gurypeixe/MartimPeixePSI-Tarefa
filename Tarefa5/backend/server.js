@@ -41,11 +41,21 @@ app.get("/cartas", (req, res) => {
 });
 
 app.post("/api/cartas", (req, res) => {
-  cards = getCards();
-  const card = req.body;
-  if (!card.id) {
-    card.id = cards.length > 0 ? Math.max(...cards.map((c) => c.id || 0)) + 1 : 1;
+  const { name, type, attack } = req.body;
+
+  // Validação: 400 se faltar nome ou tipo
+  if (!name || !name.trim() || !type || !type.trim()) {
+    return res.status(400).json({ error: "HTTP 400 - Nome e tipo são obrigatórios" });
   }
+
+  cards = getCards();
+  const card = {
+    id: cards.length > 0 ? Math.max(...cards.map((c) => c.id || 0)) + 1 : 1,
+    name: name.trim(),
+    type: type.trim(),
+    attack: Number(attack) || 0,
+  };
+
   cards.push(card);
   saveCards(cards);
   res.status(201).json(card);

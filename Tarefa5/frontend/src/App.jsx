@@ -14,9 +14,12 @@ export default function App() {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [attack, setAttack] = useState("");
+  const [formError, setFormError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormError(null);
+
     fetch(`${APIURL}/api/cartas`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -33,9 +36,10 @@ export default function App() {
         setName("");
         setType("");
         setAttack("");
+        setFormError(null);
       })
       .catch((err) => {
-        console.error(err);
+        setFormError(err.message);
       });
   };
 
@@ -82,7 +86,7 @@ export default function App() {
         <>
           <p>Tenho {cards.length} cartas ({visible.length} à vista)</p>
 
-          <form onSubmit={handleSubmit} style={{ marginBottom: "1.5rem" }}>
+          <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
             <input
               type="text"
               placeholder="Nome da carta"
@@ -104,6 +108,10 @@ export default function App() {
             />
             <button type="submit">Adicionar carta</button>
           </form>
+
+          {formError && (
+            <p style={{ color: "red", fontWeight: "bold" }}>{formError}</p>
+          )}
 
           <div style={{ marginBottom: "1rem" }}>
             <button onClick={sortearCarta}>Carta à sorte</button>
