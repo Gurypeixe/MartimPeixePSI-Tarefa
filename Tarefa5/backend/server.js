@@ -1,7 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors({ origin: "http://localhost:5173" }));
+app.use(express.json());
 
 const cards = [
   { id: 1, name: "Dragão", type: "Criatura", attack: 7, defense: 5 },
@@ -19,12 +23,19 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/cartas", (req, res) => {
-  res.set("Access-Control-Allow-Origin", "http://localhost:5173");
   res.json(cards);
 });
 
+app.post("/api/cartas", (req, res) => {
+  const card = req.body;
+  if (!card.id) {
+    card.id = cards.length > 0 ? Math.max(...cards.map((c) => c.id || 0)) + 1 : 1;
+  }
+  cards.push(card);
+  res.status(201).json(card);
+});
+
 app.use((req, res) => {
-  res.set("Access-Control-Allow-Origin", "http://localhost:5173");
   res.status(404).send("<h1>404 - Página não encontrada</h1>");
 });
 
